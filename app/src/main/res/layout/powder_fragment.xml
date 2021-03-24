@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.powder.PowderFragment">
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/inputSearchPowder"
+        android:hint="Search here"
+        android:background="@drawable/input_search"
+        android:paddingLeft="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:drawableRight="@drawable/ic_search"
+        android:paddingRight="10dp"
+        android:layout_height="wrap_content"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/powderRecylerView"
+        android:layout_width="347dp"
+        android:layout_height="575dp"
+        android:layout_below="@+id/inputSearchPowder"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="38dp"
+        android:layout_marginLeft="38dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="80dp" />
+
+
+</RelativeLayout>

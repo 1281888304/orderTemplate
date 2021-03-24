@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_gallery" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_slideshow" />
+        <item
+            android:id="@+id/nav_powder"
+            android:icon="@drawable/ic_baseline_blur_on_24"
+            android:title="@string/menu_powder" />
+        <item
+            android:id="@+id/nav_topping"
+            android:icon="@drawable/ic_baseline_hourglass_top_24"
+            android:title="@string/menu_topping" />
+    </group>
+
+    <item android:title="Special">
+        <menu>
+            <item
+                android:id="@+id/nav_equpiment"
+                android:icon="@drawable/ic_baseline_desktop_mac_24"
+                android:title="@string/menu_equipment" />
+            <item
+                android:id="@+id/nav_tea"
+                android:icon="@drawable/ic_baseline_navigate_next_24"
+                android:title="@string/menu_tea" />
+        </menu>
+    </item>
+
+</menu>

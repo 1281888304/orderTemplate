@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardElevation="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/toppingImageClick"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/toppingTitleCLick"
+                android:layout_margin="10dp"
+                android:textSize="16dp"
+                android:layout_below="@id/toppingImageClick"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/toppingNameClick"
+                android:layout_margin="10dp"
+                android:textSize="16dp"
+                android:layout_below="@id/toppingTitleCLick"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/toppingPriceClick"
+                android:layout_margin="10dp"
+                android:textSize="16dp"
+                android:layout_below="@id/toppingNameClick"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/toppingOrderNumClick"
+
+                android:layout_margin="10dp"
+                android:textSize="16dp"
+                android:layout_below="@id/toppingPriceClick"/>
+
+            <Button
+                android:id="@+id/toppingShopAddClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toppingOrderNumClick"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/btn"
+                android:paddingLeft="5dp"
+                android:text="ADD"
+                app:backgroundTint="#FFEB3B" />
+
+            <Button
+                android:id="@+id/toppingShopDeleteClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toppingShopAddClick"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/btn"
+                android:text="Drop"
+                app:backgroundTint="#FF5722" />
+
+
+
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
