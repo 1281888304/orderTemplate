@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OrderTemplate">
-        <activity android:name=".ui.powder.powderClickViewActivity"></activity>
-        <activity android:name=".ui.topping.ToppingViewActivity"></activity>
+        <activity android:name=".ui.slideshow.ContractInformation"></activity>
+        <activity android:name=".ui.powder.powderClickViewActivity" />
+        <activity android:name=".ui.topping.ToppingViewActivity" />
         <activity
             android:name=".Orders"
             android:label="@string/title_activity_orders"

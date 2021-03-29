@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.ordertemplate.CartProduct;
 import com.example.ordertemplate.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +34,7 @@ public class ToppingViewActivity extends AppCompatActivity {
 
     private View toppingClickView;
 
-    private DatabaseReference ref;
+    private DatabaseReference ref,cartRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +52,14 @@ public class ToppingViewActivity extends AppCompatActivity {
         toppingDropClick=findViewById(R.id.toppingShopDeleteClick);
 
         //firebase
+        //show the topping data
         ref= FirebaseDatabase.getInstance().getReference().child("Product").child("Topping");
+        //cart data
+        cartRef=FirebaseDatabase.getInstance().getReference().child("Cart");
+
 
         // the currentTopping
-        String toppingTitle =getIntent().getStringExtra("toppingKey");
+        String toppingTitle =getIntent().getStringExtra("productKey");
         String currentTopping=toppingTitle;
 
         //get data here
@@ -68,15 +73,46 @@ public class ToppingViewActivity extends AppCompatActivity {
                     String price=dataSnapshot.child("toppingPrice").getValue().toString();
                     String title=dataSnapshot.child("toppingTitle").getValue().toString();
 
-
+                    //set value
                     Picasso.get().load(imageUrl).into(toppingImageClick);
                     toppingNameClick.setText(name);
                     toppingNumClick.setText(orderNum);
                     toppingPriceClick.setText(price);
                     toppingTitleClick.setText(title);
 
+                    int num=Integer.parseInt(orderNum);
+                    String numString=String.valueOf(num);
+                    if(num>0){
+                        //add to cart list firebase object
+                        // first thing is check if it is exist
+                        cartRef=FirebaseDatabase.getInstance().getReference()
+                                .child("Cart");
+                        cartRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.hasChild(name)){
+                                    cartRef.child(name).child("cartProductNum")
+                                            .setValue(numString);
+                                }else{
+                                    //now add a new object into it
+                                    cartRef=FirebaseDatabase.getInstance().getReference()
+                                            .child("Cart");
+                                    CartProduct cart=new CartProduct(name,numString,price,title);
+                                    cartRef.child(title).setValue(cart);
+                                }
+                            }
 
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
+                            }
+                        });
+                    }
+
+                    //delete if num<0
+                    if(num==0){
+                        cartRef.child(title).removeValue();
+                    }
                 }
             }
 
@@ -86,6 +122,7 @@ public class ToppingViewActivity extends AppCompatActivity {
             }
         });
 
+        //Add here
         toppingAddClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,10 +133,10 @@ public class ToppingViewActivity extends AppCompatActivity {
                         int num=Integer.parseInt(orderNum);
                         num++;
                         orderNum=String.valueOf(num);
+                        //add toppingNum in Firebase
                         myRef=FirebaseDatabase.getInstance().getReference()
                                 .child("Product").child("Topping").child(toppingTitle).child("toppingNum");
                         myRef.setValue(orderNum);
-
                     }
 
                     @Override
@@ -107,6 +144,8 @@ public class ToppingViewActivity extends AppCompatActivity {
 
                     }
                 });
+
+
             }
         });
 
@@ -118,12 +157,13 @@ public class ToppingViewActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String orderNum=snapshot.child("toppingNum").getValue().toString();
                         int num=Integer.parseInt(orderNum);
-                        num--;
+                        if(num>0){
+                            num--;
+                        }
                         orderNum=String.valueOf(num);
                         myRef=FirebaseDatabase.getInstance().getReference()
                                 .child("Product").child("Topping").child(toppingTitle).child("toppingNum");
                         myRef.setValue(orderNum);
-
                     }
 
                     @Override
@@ -133,6 +173,7 @@ public class ToppingViewActivity extends AppCompatActivity {
                 });
             }
         });
+
 
 
 

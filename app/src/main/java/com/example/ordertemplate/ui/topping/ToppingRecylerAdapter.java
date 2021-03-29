@@ -15,11 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.ordertemplate.R;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.ViewHolder> {
+public class ToppingRecylerAdapter extends RecyclerView.Adapter<ToppingRecylerAdapter.ViewHolder> {
 
     private static final String tag = "RecylerView";
     private Context mContext;
@@ -28,7 +27,7 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.ViewHold
 
     private Context getmContext;
 
-    public RecylerAdapter(Context mContext, ArrayList<Toppings> toppingList) {
+    public ToppingRecylerAdapter(Context mContext, ArrayList<Toppings> toppingList) {
         this.mContext = mContext;
         this.toppingList = toppingList;
     }
@@ -37,7 +36,7 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.ViewHold
 
     @NonNull
     @Override
-    public RecylerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ToppingRecylerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //hold the view and put it on this template
         View view= LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.topping_item,parent,false);
@@ -106,7 +105,7 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(v.getContext(),ToppingViewActivity.class);
-                intent.putExtra("toppingKey",currentTopping);
+                intent.putExtra("productKey",currentTopping);
                 v.getContext().startActivities(new Intent[]{intent});
 
             }

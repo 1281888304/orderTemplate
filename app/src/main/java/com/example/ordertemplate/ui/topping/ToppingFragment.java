@@ -38,7 +38,7 @@ public class ToppingFragment extends Fragment {
 
 
     //adapter
-    private RecylerAdapter recylerAdapter;
+    private ToppingRecylerAdapter toppingRecylerAdapter;
 
     private Context mcontext;
 
@@ -86,8 +86,7 @@ public class ToppingFragment extends Fragment {
 
         GetDataFromFirebase();
 
-        //try to change data here
-        toppingAdd= view.findViewById(R.id.toppingShopAdd);
+
 
 
 
@@ -116,9 +115,9 @@ public class ToppingFragment extends Fragment {
                     toppingsList.add(toppings);
                 }
 
-                recylerAdapter = new RecylerAdapter(getContext(),toppingsList);
-                recyclerView.setAdapter(recylerAdapter);
-                recylerAdapter.notifyDataSetChanged();
+                toppingRecylerAdapter = new ToppingRecylerAdapter(getContext(),toppingsList);
+                recyclerView.setAdapter(toppingRecylerAdapter);
+                toppingRecylerAdapter.notifyDataSetChanged();
 
 
             }
@@ -135,8 +134,8 @@ public class ToppingFragment extends Fragment {
         if(toppingsList!=null){
             toppingsList.clear();
 
-            if(recylerAdapter!=null){
-                recylerAdapter.notifyDataSetChanged();
+            if(toppingRecylerAdapter !=null){
+                toppingRecylerAdapter.notifyDataSetChanged();
             }
 
         }
