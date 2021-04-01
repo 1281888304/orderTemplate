@@ -78,14 +78,12 @@ public class ToppingRecylerAdapter extends RecyclerView.Adapter<ToppingRecylerAd
 
         numRef = FirebaseDatabase.getInstance().getReference()
                 .child("Cart").child("1");
-        numRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        numRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.hasChild(currentTopping)) {
-//                    Map<String,Object> map=(Map<String, Object>) snapshot.getValue();
-//                    Object number=map.get("cartProductNum");
-//                    String num=String.valueOf(number);
-//                    numhelper=num;
+                if (!snapshot.hasChild(currentTopping)) {
+                    numhelper="0";
+                }else{
                     numRef.child(currentTopping).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -151,8 +149,8 @@ public class ToppingRecylerAdapter extends RecyclerView.Adapter<ToppingRecylerAd
             toppingPrice = itemView.findViewById(R.id.toppingPrice);
 
             toppingNum = itemView.findViewById(R.id.toppingOrderNum);
-            toppingAdd = itemView.findViewById(R.id.toppingShopAdd);
-            toppingDrop = itemView.findViewById(R.id.toppingShopDelete);
+//            toppingAdd = itemView.findViewById(R.id.toppingShopAdd);
+//            toppingDrop = itemView.findViewById(R.id.toppingShopDelete);
 
             toppingTitle = itemView.findViewById(R.id.toppingTitle);
 

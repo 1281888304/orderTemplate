@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
@@ -56,31 +56,7 @@
                 android:textSize="16dp"
                 android:layout_below="@id/toppingPrice"/>
 
-            <Button
-                android:id="@+id/toppingShopAdd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/toppingOrderNum"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
 
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/btn"
-                android:paddingLeft="5dp"
-                android:text="ADD"
-                app:backgroundTint="#FFEB3B" />
-
-            <Button
-                android:id="@+id/toppingShopDelete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/toppingShopAdd"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/btn"
-                android:text="Drop"
-                app:backgroundTint="#FF5722" />
 
 
 
