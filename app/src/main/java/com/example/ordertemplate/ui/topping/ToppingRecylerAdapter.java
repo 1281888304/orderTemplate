@@ -13,19 +13,28 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.ordertemplate.CartProduct;
 import com.example.ordertemplate.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class ToppingRecylerAdapter extends RecyclerView.Adapter<ToppingRecylerAdapter.ViewHolder> {
 
     private static final String tag = "RecylerView";
     private Context mContext;
     private ArrayList<Toppings> toppingList;
-    private DatabaseReference myRef;
+    private DatabaseReference myRef, numRef;
 
     private Context getmContext;
+
+    //number of current string
+    String numhelper = "";
 
     public ToppingRecylerAdapter(Context mContext, ArrayList<Toppings> toppingList) {
         this.mContext = mContext;
@@ -33,13 +42,12 @@ public class ToppingRecylerAdapter extends RecyclerView.Adapter<ToppingRecylerAd
     }
 
 
-
     @NonNull
     @Override
     public ToppingRecylerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //hold the view and put it on this template
-        View view= LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.topping_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.topping_item, parent, false);
 
         return new ViewHolder(view);
 
@@ -47,51 +55,19 @@ public class ToppingRecylerAdapter extends RecyclerView.Adapter<ToppingRecylerAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            //here is comment to click change layout and database
+        //here is comment to click change layout and database
 
-        String currentTopping=toppingList.get(position).getToppingTitle();
-//
-//
-//
-//        holder.toppingAdd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String numString=toppingList.get(position).getToppingNum();
-//                int num=Integer.parseInt(numString);
-//                num++;
-//                numString=String.valueOf(num);
-////                holder.toppingNum.setText(numString);
-//
-//                //now edit firebase
-//                myRef=FirebaseDatabase.getInstance().getReference()
-//                        .child("Product").child("Topping").child(currentTopping).child("toppingNum");
-//                myRef.setValue(numString);
-//            }
-//        });
-//
-//
-//
-//        holder.toppingDrop.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String numString=toppingList.get(position).getToppingNum();
-//                int num=Integer.parseInt(numString);
-//                num--;
-//                numString=String.valueOf(num);
-////                holder.toppingNum.setText(numString);
-//
-//                //now edit firebase
-//                myRef=FirebaseDatabase.getInstance().getReference()
-//                        .child("Product").child("Topping").child(currentTopping).child("toppingNum");
-//                myRef.setValue(numString);
-//            }
-//        });
+        String currentTopping = toppingList.get(position).getToppingTitle();
+
 
         //show the values
         holder.toppingName.setText(toppingList.get(position).getToppingName());
         holder.toppingPrice.setText(toppingList.get(position).getToppingPrice());
-        holder.toppingNum.setText(toppingList.get(position).getToppingNum());
+//        holder.toppingNum.setText(toppingList.get(position).getToppingNum());
         holder.toppingTitle.setText(toppingList.get(position).getToppingTitle());
+
+
+        holder.toppingNum.setText("Unlimited");
 
 
         //image:Glide Library
@@ -100,12 +76,46 @@ public class ToppingRecylerAdapter extends RecyclerView.Adapter<ToppingRecylerAd
                 .into(holder.toppingImage);
 
 
+        numRef = FirebaseDatabase.getInstance().getReference()
+                .child("Cart").child("1");
+        numRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild(currentTopping)) {
+//                    Map<String,Object> map=(Map<String, Object>) snapshot.getValue();
+//                    Object number=map.get("cartProductNum");
+//                    String num=String.valueOf(number);
+//                    numhelper=num;
+                    numRef.child(currentTopping).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Map<String,Object> map=(Map<String, Object>) snapshot.getValue();
+                            Object number=map.get("cartProductNum");
+                            String num=String.valueOf(number);
+                            numhelper=num;
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(v.getContext(),ToppingViewActivity.class);
-                intent.putExtra("productKey",currentTopping);
+                Intent intent = new Intent(v.getContext(), ToppingViewActivity.class);
+                intent.putExtra("productKey", currentTopping);
+                intent.putExtra("productNum", numhelper);
                 v.getContext().startActivities(new Intent[]{intent});
 
             }
@@ -128,7 +138,7 @@ public class ToppingRecylerAdapter extends RecyclerView.Adapter<ToppingRecylerAd
         TextView toppingPrice;
 
         //btn
-        private Button toppingAdd,toppingDrop;
+        private Button toppingAdd, toppingDrop;
         TextView toppingNum;
         TextView toppingTitle;
 
@@ -136,15 +146,15 @@ public class ToppingRecylerAdapter extends RecyclerView.Adapter<ToppingRecylerAd
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            toppingImage=itemView.findViewById(R.id.toppingImage);
-            toppingName=itemView.findViewById(R.id.toppingName);
-            toppingPrice=itemView.findViewById(R.id.toppingPrice);
+            toppingImage = itemView.findViewById(R.id.toppingImage);
+            toppingName = itemView.findViewById(R.id.toppingName);
+            toppingPrice = itemView.findViewById(R.id.toppingPrice);
 
-            toppingNum=itemView.findViewById(R.id.toppingOrderNum);
-            toppingAdd=itemView.findViewById(R.id.toppingShopAdd);
-            toppingDrop=itemView.findViewById(R.id.toppingShopDelete);
+            toppingNum = itemView.findViewById(R.id.toppingOrderNum);
+            toppingAdd = itemView.findViewById(R.id.toppingShopAdd);
+            toppingDrop = itemView.findViewById(R.id.toppingShopDelete);
 
-            toppingTitle=itemView.findViewById(R.id.toppingTitle);
+            toppingTitle = itemView.findViewById(R.id.toppingTitle);
 
         }
     }

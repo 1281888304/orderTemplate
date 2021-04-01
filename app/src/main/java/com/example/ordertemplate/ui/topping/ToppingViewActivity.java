@@ -19,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+
+
 public class ToppingViewActivity extends AppCompatActivity {
 
     private ImageView toppingImageClick;
@@ -36,6 +38,8 @@ public class ToppingViewActivity extends AppCompatActivity {
 
     private DatabaseReference ref,cartRef;
 
+    private String orderNumString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +52,8 @@ public class ToppingViewActivity extends AppCompatActivity {
         toppingDropClick=findViewById(R.id.toppingShopDeleteClick);
         toppingNumClick=findViewById(R.id.toppingOrderNumClick);
         toppingTitleClick=findViewById(R.id.toppingTitleCLick);
-        toppingAddClick=findViewById(R.id.toppingShopAddClick);
-        toppingDropClick=findViewById(R.id.toppingShopDeleteClick);
+
+
 
         //firebase
         //show the topping data
@@ -62,6 +66,42 @@ public class ToppingViewActivity extends AppCompatActivity {
         String toppingTitle =getIntent().getStringExtra("productKey");
         String currentTopping=toppingTitle;
 
+
+
+        if(getIntent().getStringExtra("productNum").isEmpty() ||
+                getIntent().getStringExtra("productNum")==null){
+            orderNumString="0";
+        }else{
+            orderNumString=getIntent().getStringExtra("productNum");
+        }
+        //get the data
+        getData(toppingTitle,orderNumString);
+
+        //Add here
+        toppingAddClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int num=Integer.parseInt(orderNumString);
+                num++;
+                orderNumString=String.valueOf(num);
+                getData(toppingTitle,orderNumString);
+            }
+        });
+
+        toppingDropClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int num=Integer.parseInt(orderNumString);
+                if(num>0){
+                    num--;
+                }
+                orderNumString=String.valueOf(num);
+                getData(toppingTitle,orderNumString);
+            }
+        });
+    }
+
+    private void getData(String toppingTitle, String orderNumString) {
         //get data here
         ref.child(toppingTitle).addValueEventListener(new ValueEventListener() {
             @Override
@@ -69,24 +109,24 @@ public class ToppingViewActivity extends AppCompatActivity {
                 if(dataSnapshot.exists()){
                     String imageUrl=dataSnapshot.child("toppingImage").getValue().toString();
                     String name=dataSnapshot.child("toppingName").getValue().toString();
-                    String orderNum=dataSnapshot.child("toppingNum").getValue().toString();
+
                     String price=dataSnapshot.child("toppingPrice").getValue().toString();
                     String title=dataSnapshot.child("toppingTitle").getValue().toString();
 
                     //set value
                     Picasso.get().load(imageUrl).into(toppingImageClick);
                     toppingNameClick.setText(name);
-                    toppingNumClick.setText(orderNum);
+                    toppingNumClick.setText(orderNumString);
                     toppingPriceClick.setText(price);
                     toppingTitleClick.setText(title);
 
-                    int num=Integer.parseInt(orderNum);
+                    int num=Integer.parseInt(orderNumString);
                     String numString=String.valueOf(num);
                     if(num>0){
                         //add to cart list firebase object
                         // first thing is check if it is exist
                         cartRef=FirebaseDatabase.getInstance().getReference()
-                                .child("Cart");
+                                .child("Cart").child("1");
                         cartRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -98,7 +138,7 @@ public class ToppingViewActivity extends AppCompatActivity {
                                     cartRef=FirebaseDatabase.getInstance().getReference()
                                             .child("Cart");
                                     CartProduct cart=new CartProduct(name,numString,price,title);
-                                    cartRef.child(title).setValue(cart);
+                                    cartRef.child("1").child(title).setValue(cart);
                                 }
                             }
 
@@ -111,7 +151,7 @@ public class ToppingViewActivity extends AppCompatActivity {
 
                     //delete if num<0
                     if(num==0){
-                        cartRef.child(title).removeValue();
+                        cartRef.child("1").child(title).removeValue();
                     }
                 }
             }
@@ -121,62 +161,5 @@ public class ToppingViewActivity extends AppCompatActivity {
 
             }
         });
-
-        //Add here
-        toppingAddClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ref.child(toppingTitle).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String orderNum=snapshot.child("toppingNum").getValue().toString();
-                        int num=Integer.parseInt(orderNum);
-                        num++;
-                        orderNum=String.valueOf(num);
-                        //add toppingNum in Firebase
-                        myRef=FirebaseDatabase.getInstance().getReference()
-                                .child("Product").child("Topping").child(toppingTitle).child("toppingNum");
-                        myRef.setValue(orderNum);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-
-            }
-        });
-
-        toppingDropClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ref.child(toppingTitle).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String orderNum=snapshot.child("toppingNum").getValue().toString();
-                        int num=Integer.parseInt(orderNum);
-                        if(num>0){
-                            num--;
-                        }
-                        orderNum=String.valueOf(num);
-                        myRef=FirebaseDatabase.getInstance().getReference()
-                                .child("Product").child("Topping").child(toppingTitle).child("toppingNum");
-                        myRef.setValue(orderNum);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-        });
-
-
-
-
-
     }
 }

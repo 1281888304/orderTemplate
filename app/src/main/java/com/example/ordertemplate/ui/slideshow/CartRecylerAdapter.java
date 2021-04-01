@@ -50,6 +50,8 @@ public class CartRecylerAdapter extends RecyclerView.Adapter<CartRecylerAdapter.
         holder.cartProductPrice.setText("Item Price: "+cartList.get(position).getCartProductPrice());
         holder.cartProductNum.setText("Order Number: "+cartList.get(position).getCartProductNum());
 
+        String numHelper=cartList.get(position).getCartProductNum();
+
         String cureentTitle=cartList.get(position).getCartProductTitle();
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +59,7 @@ public class CartRecylerAdapter extends RecyclerView.Adapter<CartRecylerAdapter.
                 if(cureentTitle.startsWith("t") || cureentTitle.startsWith("T")){
                     Intent intent=new Intent(v.getContext(), ToppingViewActivity.class);
                     intent.putExtra("productKey",cureentTitle);
+                    intent.putExtra("productNum",numHelper);
                     v.getContext().startActivities(new Intent[]{intent});
                 }
 

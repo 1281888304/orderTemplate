@@ -81,7 +81,7 @@ public class SlideshowFragment extends Fragment {
 
     private void countPrice() {
 
-        priceRef=FirebaseDatabase.getInstance().getReference().child("Cart");
+        priceRef=FirebaseDatabase.getInstance().getReference().child("Cart").child("1");
         priceRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -118,7 +118,7 @@ public class SlideshowFragment extends Fragment {
     }
 
     private void getData() {
-        Query query=myRef.child("Cart");
+        Query query=myRef.child("Cart").child("1");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
