@@ -116,7 +116,7 @@ public class ToppingViewActivity extends AppCompatActivity {
                     //set value
                     Picasso.get().load(imageUrl).into(toppingImageClick);
                     toppingNameClick.setText(name);
-                    toppingNumClick.setText(orderNumString);
+                    toppingNumClick.setText("Order Number: "+orderNumString);
                     toppingPriceClick.setText(price);
                     toppingTitleClick.setText(title);
 

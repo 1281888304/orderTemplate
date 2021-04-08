@@ -81,9 +81,6 @@ public class PowderFragment extends Fragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(),powderClickViewActivity.class);
                         intent.putExtra("powderKey",getRef(position).getKey());
-
-
-
                         startActivity(intent);
                     }
                 });

@@ -11,10 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.ordertemplate.R;
 import com.google.firebase.database.DataSnapshot;
@@ -32,11 +35,7 @@ public class ToppingFragment extends Fragment {
     ArrayList<Toppings> toppingsList;
     private DatabaseReference myRef;
     private RecyclerView recyclerView;
-
-    private Button toppingAdd,toppingDrop;
-
-
-
+    private EditText searchTopping;
     //adapter
     private ToppingRecylerAdapter toppingRecylerAdapter;
 
@@ -61,13 +60,8 @@ public class ToppingFragment extends Fragment {
 //            }
 //        });
 
-
-
-
         recyclerView=view.findViewById(R.id.recylerView);
-
-
-
+        searchTopping=view.findViewById(R.id.inputSearchTopping);
          //variables
 
 
@@ -83,18 +77,41 @@ public class ToppingFragment extends Fragment {
         clearAll();
 
         //get data model
+        GetDataFromFirebase("");
 
-        GetDataFromFirebase();
+        //search for data
+        searchTopping.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+            }
 
-
+            @Override
+            public void afterTextChanged(Editable s) {
+                filter(s.toString());
+            }
+        });
 
         return view;
     }
 
-    private void GetDataFromFirebase() {
+    private void filter(String text) {
+
+        ArrayList<Toppings> filterList=new ArrayList<>();
+        for(Toppings item : toppingsList){
+            if(item.getToppingName().toLowerCase().contains(text.toLowerCase())){
+                filterList.add(item);
+            }
+        }
+        toppingRecylerAdapter.filteredList(filterList);
+    }
+
+    private void GetDataFromFirebase(String data) {
 
         Query query=myRef.child("Product").child("Topping");
 
